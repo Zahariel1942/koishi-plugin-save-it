@@ -1,7 +1,10 @@
 {
   "name": "koishi-plugin-save-it",
-  "description": "帮你保存上面的色图",
-  "version": "0.0.1",
+  "description": "帮你保存群里的色图",
+  "version": "1.0.0",
+  "contributors": [
+    "Zahariel1942 <nakating@gmail.com>"
+  ],
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -9,14 +12,22 @@
     "dist"
   ],
   "license": "MIT",
-  "scripts": {},
   "keywords": [
     "chatbot",
     "koishi",
     "plugin"
   ],
-  "devDependencies": {},
   "peerDependencies": {
     "koishi": "^4.17.4"
+  },
+  "koishi": {
+    "service": {
+      "optional": [
+        "assets"
+      ],
+      "implements": [
+        "save-it"
+      ]
+    }
   }
 }
