@@ -5,6 +5,11 @@
   "contributors": [
     "Zahariel1942 <nakating@gmail.com>"
   ],
+  "homepage": "https://github.com/Zahariel1942/koishi-plugin-save-it",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zahariel1942/koishi-plugin-save-it.git"
+  },
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
