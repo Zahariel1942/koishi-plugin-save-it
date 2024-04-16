@@ -49,7 +49,8 @@ export function apply(ctx: Context, config: Config) {
   ctx
     .command("save-it <count:number>", "帮你保存色图")
     .alias("save")
-    .usage(`save <count:number> - 保存最近的 <count> 张图片`)
+    .alias("kksk")
+    .usage(`save - 保存最近的一张图片\r\nsave 3 - 保存最近的 3 张图片`)
     .action(async ({ session }, count = 1) => {
       if (!buffer) return;
 
