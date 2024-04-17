@@ -1,11 +1,8 @@
-import type { Session, Context } from "koishi";
+import type { Context } from "koishi";
 import fs from "fs";
 import { resolve } from "path";
 import { fileURLToPath } from "url";
 import { logger } from ".";
-import sharp from "sharp";
-
-sharp.cache(false);
 
 export class ImageManager {
   private _storeDir: string = "";
@@ -39,7 +36,6 @@ export class ImageManager {
       })
       .then((url) => fileURLToPath(url))
       .then((filePath) => moveToDest(filePath, name, this._storeDir))
-      .then((filePath) => getThumbnail(filePath, this._thumbnailDir))
       .catch((e) => {
         logger.error(`Failed to save image ${name}`, e);
       });
@@ -49,17 +45,6 @@ export class ImageManager {
     const filePath = resolve(this._storeDir, name);
     deleteFile(filePath);
   }
-}
-
-async function getThumbnail(filepath: string, thumbnailDir: string) {
-  const filename = filepath.split("/").pop();
-  const thumbnail = resolve(thumbnailDir, filename + "_thumbnail.jpg");
-  if (fs.existsSync(thumbnail)) return thumbnail;
-  return await sharp(filepath)
-    .resize(160)
-    .jpeg({ mozjpeg: true })
-    .toFile(thumbnail)
-    .then(() => thumbnail);
 }
 
 function getFiles(dir: string) {

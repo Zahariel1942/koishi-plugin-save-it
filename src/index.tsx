@@ -1,6 +1,5 @@
-import { Context, Schema, Session, Logger, h } from "koishi";
-import fs from "fs";
-import { pathToFileURL, fileURLToPath } from "url";
+import { Context, Schema, Logger } from "koishi";
+import { pathToFileURL } from "url";
 import { resolve } from "path";
 import {} from "@koishijs/assets";
 import { Buffer } from "./buffer";
@@ -50,7 +49,7 @@ export function apply(ctx: Context, config: Config) {
   });
 
   ctx.on("message", async (session) => {
-    // if (session.channelId !== config.groupId) return;
+    if (session.channelId !== config.groupId) return;
 
     if (hasImages(session)) {
       buffer.add(session);
@@ -69,29 +68,25 @@ export function apply(ctx: Context, config: Config) {
       let result = [];
       for (const s of sessions) {
         const images = getImagesFromSession(s);
-        const filename = normalizeName(s);
-        const thumbnails = await Promise.all(
+        const savedImages = await Promise.all(
           images.map((img, index) =>
-            imageManager.save(img, `${filename}_${index}`)
+            imageManager.save(img, `${normalizeName(s)}_${index}`)
           )
         );
         result.push({
           name: `${s.event.user.name}@${formatTimestamp(s.timestamp)}`,
-          thumbnails,
+          length: savedImages.length,
         });
       }
 
       return (
         <p>
           <text content="已保存图片："></text>
-          {result.map((el) => (
-            <p>
-              <text content={`${el.name}:`}></text>
-              <br />
-              {el.thumbnails.map((thumbnail) => (
-                <img src={pathToFileURL(thumbnail).href} />
-              ))}
-            </p>
+          <br />
+          {result.map((s) => (
+            <text
+              content={`    ${s.name} ${s.length > 1 ? `x${s.length}` : ""}\r\n`}
+            ></text>
           ))}
         </p>
       );

@@ -1,5 +1,4 @@
 import type { Session } from "koishi";
-import fs from "fs";
 
 export function getDateTimeString() {
   const date = new Date();
