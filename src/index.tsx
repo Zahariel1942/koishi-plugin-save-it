@@ -50,7 +50,7 @@ export function apply(ctx: Context, config: Config) {
   });
 
   ctx.on("message", async (session) => {
-    if (session.channelId !== config.groupId) return;
+    // if (session.channelId !== config.groupId) return;
 
     if (hasImages(session)) {
       buffer.add(session);
@@ -66,19 +66,35 @@ export function apply(ctx: Context, config: Config) {
     .action(async ({ session }, count = 1) => {
       const sessions = buffer.take(count);
       if (!sessions.length) return "没有图片";
-      let result = "已保存图片：\r\n";
+      let result = [];
       for (const s of sessions) {
         const images = getImagesFromSession(s);
-        for (const img of images) {
-          await imageManager.save(img, normalizeName(s));
-        }
-        result += `    `;
-        result += `${s.event.user.name}@${formatTimestamp(s.timestamp)}`;
-        result += `${images.length > 1 ? ` x${images.length}` : ""}`;
-        result += `\r\n`;
+        const filename = normalizeName(s);
+        const thumbnails = await Promise.all(
+          images.map((img, index) =>
+            imageManager.save(img, `${filename}_${index}`)
+          )
+        );
+        result.push({
+          name: `${s.event.user.name}@${formatTimestamp(s.timestamp)}`,
+          thumbnails,
+        });
       }
 
-      return result;
+      return (
+        <p>
+          <text content="已保存图片："></text>
+          {result.map((el) => (
+            <p>
+              <text content={`${el.name}:`}></text>
+              <br />
+              {el.thumbnails.map((thumbnail) => (
+                <img src={pathToFileURL(thumbnail).href} />
+              ))}
+            </p>
+          ))}
+        </p>
+      );
     });
 
   ctx.command("来张色图").action(async ({ session }) => {
