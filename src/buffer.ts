@@ -7,17 +7,20 @@ export class Buffer {
   }
 
   public add(s: Session) {
-    this.buffer.unshift(s);
+    this.buffer.push(s);
 
     if (this.buffer.length > this._bufferLenght) {
-      this.buffer = this.buffer.slice(-this._bufferLenght);
+      this.buffer.shift();
     }
   }
 
   public take(count: number = 1) {
-    const result = this.buffer.slice(0, count);
-    this.buffer = this.buffer.slice(count);
-    return result;
+    const result = [];
+
+    while (count-- > 0) {
+      result.push(this.buffer.pop());
+    }
+    return result.reverse();
   }
 
   public clear() {

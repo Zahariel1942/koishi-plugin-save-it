@@ -6,15 +6,12 @@ import { logger } from ".";
 
 export class ImageManager {
   private _storeDir: string = "";
-  private _thumbnailDir: string = "";
   private _ctx: Context = null;
   constructor({ path, ctx }: { path: string; ctx: Context }) {
     this._storeDir = path;
-    this._thumbnailDir = path + "/thumbnails";
     this._ctx = ctx;
 
     mkdir(this._storeDir);
-    mkdir(this._thumbnailDir);
   }
 
   public getRandom() {

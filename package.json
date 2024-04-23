@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-save-it",
   "description": "帮你保存群里的色图",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "contributors": [
     "Zahariel1942 <nakating@gmail.com>"
   ],
